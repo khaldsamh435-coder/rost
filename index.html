@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>School Portal | المنصة المدرسية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status"></div>
+  <main id="authView" class="auth-layout">
+    <section class="auth-aside">
+      <div class="brand-mark">S</div>
+      <p class="eyebrow">SCHOOL PORTAL</p>
+      <h1>مدرستك،<br>في مكان واحد.</h1>
+      <p class="muted">منصة تعليمية تجمع الطلاب والمدرسين والإدارة في تجربة منظمة وآمنة.</p>
+      <div class="feature-list">
+        <span>✦ متابعة الواجبات والتقييمات</span>
+        <span>✦ الحصص والملفات التعليمية</span>
+        <span>✦ أخبار وإعلانات المدرسة</span>
+      </div>
+    </section>
+    <section class="auth-card">
+      <div class="mobile-brand"><span class="brand-mark">S</span><b>School Portal</b></div>
+      <div class="auth-tabs">
+        <button class="tab active" data-auth-tab="login">تسجيل الدخول</button>
+        <button class="tab" data-auth-tab="register">إنشاء حساب طالب</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <h2>مرحبًا بعودتك</h2><p class="muted">سجّل الدخول للمتابعة إلى منصتك.</p>
+        <label>البريد الإلكتروني<input name="email" type="email" required autocomplete="username" placeholder="name@example.com"></label>
+        <label>كلمة المرور<input name="password" type="password" required autocomplete="current-password" placeholder="••••••••"></label>
+        <button class="primary full" type="submit">تسجيل الدخول</button>
+      </form>
+      <form id="registerForm" class="auth-form hidden">
+        <h2>إنشاء حساب طالب</h2><p class="muted">أنشئ حسابك باستخدام بريد إلكتروني يمكنك الوصول إليه.</p>
+        <label>الاسم الكامل<input name="full_name" required minlength="3" maxlength="80" placeholder="اسم الطالب"></label>
+        <label>الصف الدراسي<select name="grade" required><option value="">اختر الصف</option><option value="الأول الثانوي">الأول الثانوي</option><option value="الثاني الثانوي">الثاني الثانوي</option></select></label>
+        <label>البريد الإلكتروني<input name="email" type="email" required autocomplete="email" placeholder="name@example.com"></label>
+        <label>كلمة المرور<input name="password" type="password" required minlength="8" autocomplete="new-password" placeholder="8 أحرف على الأقل"></label>
+        <button class="primary full" type="submit">إنشاء الحساب</button>
+        <small class="muted">بعد التسجيل قد تحتاج إلى تأكيد بريدك الإلكتروني قبل تسجيل الدخول.</small>
+      </form>
+      <p class="security-note">🔒 لا تشارك كلمة المرور أو الكود التعريفي الخاص بك مع أي شخص.</p>
+    </section>
+  </main>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><span class="brand-mark">S</span><div><b>School Portal</b><small>المنصة المدرسية</small></div></div>
+      <div class="user-mini"><div class="avatar" id="avatarLetter">ط</div><div><b id="sideName">...</b><small id="sideRole">...</small></div></div>
+      <nav id="navigation" class="navigation"></nav>
+      <button id="logoutBtn" class="logout">↪ تسجيل الخروج</button>
+    </aside>
+    <section class="main-area">
+      <header class="topbar"><div><p class="eyebrow" id="pageEyebrow">مساحة التعلم</p><h1 id="pageTitle">الرئيسية</h1></div><div class="top-actions"><span class="date-chip" id="todayLabel"></span><button class="icon-btn" id="refreshBtn" title="تحديث">⟳</button></div></header>
+      <div id="welcomePanel" class="welcome-panel"><div><span class="eyebrow">مرحبًا بك</span><h2 id="welcomeName">...</h2><p id="welcomeMeta" class="muted"></p></div><div class="welcome-art">✦</div></div>
+      <section id="contentArea" class="content-area"></section>
+    </section>
+  </div>
+  <dialog id="contentDialog" class="modal">
+    <form id="contentForm" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">إضافة محتوى</p><h2 id="dialogTitle">منشور جديد</h2></div><button type="button" class="icon-btn" id="closeDialog">×</button></div>
+      <label>العنوان<input name="title" required maxlength="140"></label>
+      <div class="form-grid">
+        <label>النوع<select name="kind" required><option value="announcement">إعلان</option><option value="lesson">حصة</option><option value="assignment">واجب</option><option value="assessment">تقييم / امتحان</option></select></label>
+        <label>الصف المستهدف<select name="grade" required><option value="الأول الثانوي">الأول الثانوي</option><option value="الثاني الثانوي">الثاني الثانوي</option><option value="الكل">كل الصفوف</option></select></label>
+        <label>المادة<input name="subject" maxlength="80" placeholder="مثال: الرياضيات"></label>
+        <label>الموعد النهائي<input name="due_at" type="datetime-local"></label>
+      </div>
+      <label>التفاصيل والتعليمات<textarea name="body" rows="5" placeholder="اكتب تفاصيل المحتوى..."></textarea></label>
+      <label>ملف مرفق (اختياري)<input name="attachment" type="file" accept="image/*,.pdf,.doc,.docx,.ppt,.pptx"></label>
+      <label class="check-label"><input name="pinned" type="checkbox"> تثبيت الإعلان (للإدارة فقط)</label>
+      <button class="primary full" type="submit">نشر المحتوى</button>
+    </form>
+  </dialog>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
